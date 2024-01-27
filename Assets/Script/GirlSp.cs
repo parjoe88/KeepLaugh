@@ -8,6 +8,9 @@ public class GirlSp : MonoBehaviour
     public Image girlSp;
     public Sprite[] girlTxt;
     public Slider bar;
+    public Image barFill;
+    public Color lowColor;
+    public Color highColor;
 
     public void onMoodChange(float value)
     {
@@ -15,5 +18,7 @@ public class GirlSp : MonoBehaviour
         int lvl = Mathf.FloorToInt(value / 20f);
         lvl = Mathf.Clamp(lvl, 0, 4);
         girlSp.sprite = girlTxt[lvl];
+
+        barFill.color = new Color(lowColor.r + (highColor.r - lowColor.r * value / 100), lowColor.g + (highColor.g - lowColor.g * value / 100), lowColor.b + (highColor.b - lowColor.b * value / 100));
     }
 }

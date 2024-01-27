@@ -23,7 +23,6 @@ public class Ball : MonoBehaviour
         {
             GameManager.instance.ballObjPool.Release(gameObject);
             GameManager.instance.mood += score;
-            GameManager.instance.score += score;
 ;       }
     }
 

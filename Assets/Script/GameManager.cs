@@ -21,9 +21,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public GirlSp girlsp;
     public Slider powerBar;
+    public GameObject touchFx;
     public float BallNextTimeMax = 1f;
     public float BallNextTimeMin = 0.1f;
-    public float recoverPower = 10;
+    public float recoverPower = 3;
+    public float powerCostPerTouch= 10;
 
     [HideInInspector]
     public double timeCounter = 0;
@@ -108,13 +110,16 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && power > 10)
+        if (Input.GetMouseButtonDown(0) && power > powerCostPerTouch)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-            if (hit) {
+            if (hit)
+            {
+                Instantiate(touchFx).transform.position = hit.collider.gameObject.transform.position;
+                score += Mathf.Abs(hit.collider.GetComponent<Ball>().score);
                 ballObjPool.Release(hit.collider.gameObject);
-                power -= 10;
+                power -= powerCostPerTouch;
             }
         }
 

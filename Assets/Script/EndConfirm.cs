@@ -11,7 +11,7 @@ public class EndConfirm : MonoBehaviour
 
     public void showEndConfirm(gameoverReason reason, int score) {
         gameObject.SetActive(true);
-        if (reason == gameoverReason.Winning)
+        if (reason == gameoverReason.Winning || reason == gameoverReason.High)
         {
             win.SetActive(true);
             lose.SetActive(false);
