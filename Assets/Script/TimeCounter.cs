@@ -9,17 +9,26 @@ using UnityEngine;
 public class TimeCounter : MonoBehaviour
 {
     private TextMeshProUGUI timeText;
+    private AudioSource timeAs;
+    private double lastTime;
     void Start()
     {
+        timeAs = gameObject.GetComponent<AudioSource>();
         timeText = gameObject.GetComponent<TextMeshProUGUI>();
         float z = -transform.eulerAngles.z;
         transform.DOLocalRotate(new Vector3(0,0,z), 1.5f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        timeText.text = timeToText(GameManager.instance.timeCounter);
+        double curTime = GameManager.instance.timeCounter;
+        timeText.text = timeToText(curTime);
+        if (curTime < 3 && lastTime > 3)
+        {
+            Debug.Log("倒數3秒");
+            timeAs.PlayOneShot(timeAs.clip);
+        }
+        lastTime = curTime;
     }
     private string timeToText(double t)
     {

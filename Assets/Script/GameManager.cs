@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     public GameObject ballPrefab;
     public TextMeshProUGUI scoreText;
     public GirlSp girlsp;
+    public Slider powerBar;
+    public float BallNextTimeMax = 1f;
+    public float BallNextTimeMin = 0.1f;
+    public float recoverPower = 10;
 
     [HideInInspector]
     public double timeCounter = 0;
@@ -47,6 +51,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _power = value;
+            this.powerBar.value = value;
         }
     }
     public ObjectPool<GameObject> ballObjPool;
@@ -54,6 +59,7 @@ public class GameManager : MonoBehaviour
     private float _mood = 50;
     private float _power = 100;
     private bool isPause = false;
+    private float nextGenTime = 0;
 
     void Awake() {
         if (!GameManager.instance)
@@ -86,14 +92,14 @@ public class GameManager : MonoBehaviour
 
     private void randomShootBall()
     {
-        if (Random.Range(0f, 1f) > 0.1)
+        nextGenTime -= Time.deltaTime;
+        if (nextGenTime <= 0)
         {
-            return;
+            int ballscore = Random.Range(-scoreRange, scoreRange + 1);
+            GameObject ball = ballObjPool.Get();
+            ball.GetComponent<Ball>().score = ballscore;
+            nextGenTime += Random.Range(BallNextTimeMin, BallNextTimeMax);
         }
-
-        int ballscore = Random.Range(-scoreRange, scoreRange + 1);
-        GameObject ball = ballObjPool.Get();
-        ball.GetComponent<Ball>().score = ballscore;
     }
 
     void Update()
@@ -104,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && power > 10)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//world
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
             if (hit) {
                 ballObjPool.Release(hit.collider.gameObject);
@@ -112,7 +118,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        power += Time.deltaTime;
+        power += Time.deltaTime * recoverPower;
 
         randomShootBall();
 
@@ -129,6 +135,11 @@ public class GameManager : MonoBehaviour
         {
             GameOver(gameoverReason.Low);
         }
+    }
+
+    public void onClickExit()
+    {
+        Application.Quit();
     }
 
     public void onClickAgain() {
