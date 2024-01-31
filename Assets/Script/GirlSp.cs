@@ -19,6 +19,6 @@ public class GirlSp : MonoBehaviour
         lvl = Mathf.Clamp(lvl, 0, 4);
         girlSp.sprite = girlTxt[lvl];
 
-        barFill.color = new Color(lowColor.r + (highColor.r - lowColor.r * value / 100), lowColor.g + (highColor.g - lowColor.g * value / 100), lowColor.b + (highColor.b - lowColor.b * value / 100));
+        barFill.color = new Color(lowColor.r + ((highColor.r - lowColor.r) * value / bar.maxValue), lowColor.g + ((highColor.g - lowColor.g) * value / bar.maxValue), lowColor.b + ((highColor.b - lowColor.b) * value / bar.maxValue));
     }
 }

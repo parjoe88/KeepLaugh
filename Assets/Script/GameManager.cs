@@ -13,7 +13,7 @@ public enum gameoverReason
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-    public double maxTime = 60;
+    public float maxTime = 60;
     public int scoreRange = 5;
     public EndConfirm confirm;
     public Transform ballStartPos;
@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public GirlSp girlsp;
     public Slider powerBar;
+    public Slider timeBar;
     public GameObject touchFx;
     public float BallNextTimeMax = 1f;
     public float BallNextTimeMin = 0.1f;
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     public float powerCostPerTouch= 10;
 
     [HideInInspector]
-    public double timeCounter = 0;
+    public float timeCounter = 0;
     public int score
     {
         get => _score;
@@ -128,6 +129,7 @@ public class GameManager : MonoBehaviour
         randomShootBall();
 
         timeCounter -= Time.deltaTime;
+        timeBar.value = timeCounter / maxTime;
         if (timeCounter <= 0)
         {
             GameOver(gameoverReason.Winning);

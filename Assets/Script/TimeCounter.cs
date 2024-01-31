@@ -10,7 +10,7 @@ public class TimeCounter : MonoBehaviour
 {
     private TextMeshProUGUI timeText;
     private AudioSource timeAs;
-    private double lastTime;
+    private float lastTime;
     void Start()
     {
         timeAs = gameObject.GetComponent<AudioSource>();
@@ -21,7 +21,7 @@ public class TimeCounter : MonoBehaviour
 
     void Update()
     {
-        double curTime = GameManager.instance.timeCounter;
+        float curTime = GameManager.instance.timeCounter;
         timeText.text = timeToText(curTime);
         if (curTime < 3 && lastTime > 3)
         {
@@ -32,8 +32,8 @@ public class TimeCounter : MonoBehaviour
     }
     private string timeToText(double t)
     {
-        DateTime startTime = new DateTime(2024, 1, 27, 8, 0, 0);
-        string str = startTime.AddMinutes(-t * 10).ToString("hh:mm tt", CultureInfo.InvariantCulture);
+        DateTime startTime = new DateTime(2024, 1, 27, 22, 0, 0);
+        string str = startTime.AddMinutes(-t * 14).ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-us"));
         return str;
     }
 }
